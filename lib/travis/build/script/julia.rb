@@ -72,11 +72,11 @@ module Travis
           end
           sh.echo 'Package name determined from repository url to be ${JL_PKG}',
             ansi: :green
+          sh.if '-a .git/shallow' do
+            sh.cmd 'git fetch --unshallow'
+          end
           # Check if the repository is using new Pkg
           sh.if "-f Project.toml || -f JuliaProject.toml" do
-            sh.if '-a .git/shallow' do
-              sh.cmd 'git fetch --unshallow'
-            end
             # build
             sh.cmd 'julia --color=yes -e "if VERSION < v\"0.7.0-DEV.5183\"; Pkg.clone(pwd()); Pkg.build(\"${JL_PKG}\"); else using Pkg; if VERSION >= v\"1.1.0-rc1\"; Pkg.build(verbose=true); else Pkg.build(); end; end"', assert: true
             # run tests
@@ -91,9 +91,6 @@ module Travis
 
           end
           sh.else do
-            sh.if '-a .git/shallow' do
-              sh.cmd 'git fetch --unshallow'
-            end
             # build
             sh.cmd 'julia --color=yes -e "VERSION >= v\"0.7.0-DEV.5183\" && using Pkg; Pkg.clone(pwd()); if VERSION >= v\"1.1.0-rc1\"; Pkg.build(\"${JL_PKG}\"; verbose=true); else Pkg.build(\"${JL_PKG}\"); end"', assert: true
             # run tests
