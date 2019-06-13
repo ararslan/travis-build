@@ -121,7 +121,7 @@ module Travis
             case julia_version = Array(config[:julia]).first.to_s
             when 'release'
               # CHANGEME on new minor releases (once or twice a year)
-              url = "julialang-s3.julialang.org/bin/#{osarch}/0.6/julia-0.6-latest-#{ext}"
+              url = "julialang-s3.julialang.org/bin/#{osarch}/1.0/julia-1.0-latest-#{ext}"
             when 'nightly'
               url = "julialangnightlies-s3.julialang.org/bin/#{osarch}/julia-latest-#{nightlyext}"
             when /^(\d+\.\d+)\.\d+$/
